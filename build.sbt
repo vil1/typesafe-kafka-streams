@@ -1,18 +1,30 @@
 import de.heikoseeberger.sbtheader.license.MIT
+import sbt._
 
-name := "typesafe-kafka-streams"
+organization in ThisBuild := "fr.psug.kafka"
 
-organization := "fr.psug.kafka"
-
-scalaVersion := "2.11.8"
+scalaVersion in ThisBuild := "2.11.8"
 
 crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
 
 val kafkaVersion = "0.10.1.1"
 
-libraryDependencies ++= Seq(
-  "org.apache.kafka" % "kafka-streams" % kafkaVersion
-)
+lazy val core = project.in(file("core"))
+  .settings(
+      name := "typesafe-kafka-streams",
+      libraryDependencies ++= Seq(
+        "org.apache.kafka" % "kafka-streams" % kafkaVersion
+      )
+  )
+
+lazy val cats = project.in(file("cats"))
+  .dependsOn(core)
+  .settings(
+    name := "typesafe-kafka-streams-cats",
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats" % "0.7.+" % Provided
+    )
+  )
 
 resolvers in ThisBuild ++= Seq(
   "conjars.org" at "http://conjars.org/repo",
