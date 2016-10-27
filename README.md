@@ -4,7 +4,7 @@ A started draft of a typesafe - scala - compatible API
 ## How to use
 The artifact is deployed on sonatype's central repository, so all you need is to add it to your resolvers and use it like that : 
 
-```
+```scala
 resolvers += Resolver.sonatypeRepo("snapshot")
 
 libraryDependencies += "fr.psug.kafka" %% "typesafe-kafka-streams" % "0.1.1-SNAPSHOT"
@@ -12,7 +12,7 @@ libraryDependencies += "fr.psug.kafka" %% "typesafe-kafka-streams" % "0.1.1-SNAP
 
 Or to use the latest stable release
 
-```
+```scala
 resolvers += Resolver.sonatypeRepo("releases")
 
 libraryDependencies += "fr.psug.kafka" %% "typesafe-kafka-streams" % "0.1.0"
@@ -26,7 +26,8 @@ You've got two options :
 
 ### Improving your existing KStream
 Once you've created your `KStream[K, V]` you can use the `.typesafe` method to get a Scala friendly Kakfa Stream API : 
-```
+
+```scala
 import fr.psug.kafka.streams.KafkaStreamsImplicits._
 
 val streams: KStream[String, String] = ???
@@ -49,6 +50,7 @@ A few key points make this draft easier to use than the original Java 8 API :
 * It is Scala friendly in terms of types. for example `Predicates[K, V]` are `(K, V) => Boolean`.
 * `Serde`(s) are no longer explicit parameters, but rather `implicit` ones. So if you've got the proper implicits in scope, you won't need to explicitely pass the Serdes as parameters.
 * we also added a few perks with for example the `partition` method that does not exists in the KStream API : 
-```
+
+```scala
 val (validated, rejected) = data.partition((_, v) => v.isRight)
 ```
